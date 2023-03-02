@@ -9,18 +9,18 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 // Declare our vertex shader
 const char* vertexShaderSource = "#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"void main()\n"
-	"{\n"
-	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"}\0";
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
 const char* fragmentShaderSource = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"void main()\n"
-	"{\n"
-	"   FragColor = vec4(1.0f, 0.2f, 0.2f, 1.0f);\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(1.0f, 0.2f, 0.2f, 1.0f);\n"
 
-	"}\n\0";
+"}\n\0";
 
 
 int main()
@@ -142,17 +142,13 @@ int main()
 	// Storing vertex data within memory on the graphics card by setting up Vertex data Buffer
 	// <------------------------------------------------------>
 	// Input Vertex Data, handled in 3d x, y, and z.
-	
+
 
 	float vertices[] = {
-		// first triangle
-		-0.9f, -0.5f, 0.0f,  // left 
-		-0.0f, -0.5f, 0.0f,  // right
-		-0.45f, 0.5f, 0.0f,  // top 
-		// second triangle
-		 0.0f, 0.5f, 0.0f,  // left
-		 0.9f, 0.5f, 0.0f,  // right
-		 0.45f, -0.5f, 0.0f   // top 
+	 0.5f,  0.5f, 0.0f,  // top right
+	 0.5f, -0.5f, 0.0f,  // bottom right
+	-0.5f, -0.5f, 0.0f,  // bottom left
+	-0.5f,  0.5f, 0.0f   // top left 
 	};
 
 	unsigned int indices[] = {
@@ -182,7 +178,7 @@ int main()
 	// 4. Stride, which is space between vertix attributes (3), 5. Data position offset (void);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -204,7 +200,7 @@ int main()
 		// Render elements from our index buffer
 		// 1. Drawing mode; 2. Count of elements to draw; 3. Type of indices; 4. Offset in EBO;
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		// Take care of all GLFW events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
