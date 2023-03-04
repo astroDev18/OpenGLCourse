@@ -1,3 +1,7 @@
+#include"imgui.h"
+#include"imgui_impl_glfw.h"
+#include"imgui_impl_opengl3.h"
+
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -10,15 +14,17 @@ const unsigned int SCR_HEIGHT = 600;
 // Declare our vertex shader
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"uniform float size;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = vec4(size * aPos.x, size * aPos.y, size * aPos.z, 1.0);\n"
 "}\0";
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"uniform vec4 color;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(1.0f, 0.2f, 0.2f, 1.0f);\n"
+"   FragColor = color;\n"
 
 "}\n\0";
 
@@ -144,21 +150,19 @@ int main()
 	// Input Vertex Data, handled in 3d x, y, and z.
 
 
-	float vertices[] = {
-	 0.5f,  0.5f, 0.0f,  // top right
-	 0.5f, -0.5f, 0.0f,  // bottom right
-	-0.5f, -0.5f, 0.0f,  // bottom left
-	-0.5f,  0.5f, 0.0f   // top left 
+	GLfloat vertices[] = {
+		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
+		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
+		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // Upper corner
 	};
 
 	unsigned int indices[] = {
-		0, 1, 3, // First triangle
-		1, 2, 3  // Second triangle
+		0, 1, 2, // First triangle
 	};
 
 	// VBO is used to store large amounts of data to be sent to the GPU's memory
 	// without having to send each vertex one at a time
-	unsigned int VBO, VAO, EBO;
+	GLuint VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &EBO);
 	glGenBuffers(1, &VBO);
@@ -181,6 +185,24 @@ int main()
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	// Initialize ImGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
+
+	// ImGui Variables
+	bool drawTriangle = true;
+	float size = 1.0f;
+	float color[4] = { 0.8f, 0.3f, 0.02f, 1.0f };
+
+	// Exporting variables to shaders
+	glUseProgram(shaderProgram);
+	glUniform1f(glGetUniformLocation(shaderProgram, "size"), size);
+	glUniform4f(glGetUniformLocation(shaderProgram, "color"), color[0], color[1], color[2], color[3]);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -193,18 +215,48 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+
+
 		// Draw our first triangle
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 
 		// Render elements from our index buffer
-		// 1. Drawing mode; 2. Count of elements to draw; 3. Type of indices; 4. Offset in EBO;
-		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		// Only draw triangle if ImGui is checked
+		if (drawTriangle)
+			// 1. Drawing mode; 2. Count of elements to draw; 3. Type of indices; 4. Offset in EBO;
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		// ImGui Window Creation
+		ImGui::Begin("My first ImGui Window!");
+		// Text that appears
+		ImGui::Text("Welcome to ImGui");
+		// Checkbox
+		ImGui::Checkbox("Draw Triangle", &drawTriangle);
+		// Slider that appears in window
+		ImGui::SliderFloat("Size", &size, 0.5f, 2.0f);
+		// Fancy color editor
+		ImGui::ColorEdit4("Color", color);
+		ImGui::End();
+
+		glUseProgram(shaderProgram);
+		glUniform1f(glGetUniformLocation(shaderProgram, "size"), size);
+		glUniform4f(glGetUniformLocation(shaderProgram, "color"), color[0], color[1], color[2], color[3]);
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		// Take care of all GLFW events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 
 	glDeleteVertexArrays(1, &VAO);
