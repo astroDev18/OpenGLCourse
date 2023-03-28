@@ -10,3 +10,6 @@ The same square in wireframe view. Note the two triangles.
 
 ![ImGui](https://media.discordapp.net/attachments/755504752011378822/1081426701151633490/ImGuiRendering.png?width=1181&height=662)
 Setting up ImGui and allowing it to modify rendering, size, and color. 
+
+![Textures](https://cdn.discordapp.com/attachments/1062012586549334147/1090158653153234965/image.png)
+Learned how to load textures from images and overlay two textures.
