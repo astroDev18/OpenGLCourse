@@ -19,6 +19,9 @@
     <Filter Include="Header Files\imgui">
       <UniqueIdentifier>{3874a58d-23fe-4248-b101-6194d5098a81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\shaders">
+      <UniqueIdentifier>{3aca1152-b682-4c30-8c60-5fc99ddfde90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -80,5 +83,16 @@
     <ClInclude Include="..\Users\karri\OneDrive\Documents\imgui-master\imgui-master\backends\imgui_impl_opengl3.h">
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="shader_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="default.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
