@@ -1,14 +1,15 @@
 #version 330 core
-
-// Outputs colors in RGBA
 out vec4 FragColor;
 
+in vec3 ourColor;
+in vec2 TexCoord;
 
-// Inputs the color from the Vertex Shader
-in vec3 color;
-
-
+// texture sampler
+uniform sampler2D texture1;
+uniform sampler2D texture2;
 void main()
 {
-	FragColor = vec4(color, 1.0f);
+    // Linear interpolate between both textures
+    
+    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
 }
