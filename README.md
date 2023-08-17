@@ -15,4 +15,4 @@ Setting up ImGui and allowing it to modify rendering, size, and color.
 Learned how to load textures from images and overlay two textures.
 
 I created a 3d spinning simulation:
-![Video](https://cdn.discordapp.com/attachments/1062012586549334147/1090619912659144814/blue-spin.mp4)
+![Video](https://cdn.discordapp.com/attachments/755504752011378822/1141575178124546220/spinnyy.gif)
