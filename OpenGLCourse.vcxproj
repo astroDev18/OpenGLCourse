@@ -161,6 +161,7 @@
     <ClInclude Include="..\LearnImGui\imgui\imstb_textedit.h" />
     <ClInclude Include="..\LearnImGui\imgui\imstb_truetype.h" />
     <ClInclude Include="..\Users\karri\OneDrive\Documents\imgui-master\imgui-master\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="shader_s.h" />
   </ItemGroup>
   <ItemGroup>
